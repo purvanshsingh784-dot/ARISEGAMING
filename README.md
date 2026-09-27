@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Arise Esports Tournament Platform — V1
 
 An online esports tournament platform for organizing and managing gaming tournaments.
@@ -122,3 +123,6 @@ client/src/config/branding.js
 ## Project
 
 **Arise Esports** — an online platform for organizing and managing esports tournaments.
+=======
+# ARISEGAMING
+>>>>>>> 0006f5f3132d57220c8016c371ac393b06b0a093
