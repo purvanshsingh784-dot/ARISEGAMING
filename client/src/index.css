@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Audiowide", cursive;
+  --font-body: "Audiowide", cursive;
+
+  --color-ink: #0e1013;
+  --color-surface: #171a1f;
+  --color-surface-raised: #1e2229;
+  --color-border: #2a2f38;
+  --color-border-strong: #3a4150;
+  --color-text: #e8e9ec;
+  --color-text-muted: #9aa0ab;
+  --color-gold: #f2b807;
+  --color-gold-dim: #a68308;
+  --color-live: #ff4d4d;
+  --color-open: #3ec97a;
+}
+
+* {
+  font-family: 'Audiowide', cursive !important;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-text);
+  font-family: 'Audiowide', cursive !important;
+}
+
+.font-display {
+  font-family: 'Audiowide', cursive !important;
+}
+
+.font-body {
+  font-family: 'Audiowide', cursive !important;
+}
+
+.clip-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+.clip-corner-sm {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}

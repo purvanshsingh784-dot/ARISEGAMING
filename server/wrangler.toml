@@ -1,0 +1,12 @@
+name = "esports-platform-backend"
+main = "server.js"
+compatibility_date = "2023-10-30"
+
+# Node.js compatibility is required for Express and Mongoose
+compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+NODE_ENV = "production"
+# Note: Set your MONGO_URI and JWT_SECRET via Cloudflare Dashboard or CLI:
+# npx wrangler secret put MONGO_URI
+# npx wrangler secret put JWT_SECRET
