@@ -12,3 +12,14 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
+
+  - type: web
+    name: arise-esports-frontend
+    env: static
+    region: singapore
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://arise-esports-backend.onrender.com/api
+
