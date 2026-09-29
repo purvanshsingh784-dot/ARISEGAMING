@@ -1,7 +1,7 @@
 services:
   - type: web
     name: arise-esports-backend
-    env: node
+    runtime: node
     region: singapore
     buildCommand: cd server && npm install
     startCommand: cd server && npm start
@@ -15,11 +15,16 @@ services:
 
   - type: web
     name: arise-esports-frontend
-    env: static
+    runtime: static
     region: singapore
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_BASE_URL
         value: https://arise-esports-backend.onrender.com/api
+
 

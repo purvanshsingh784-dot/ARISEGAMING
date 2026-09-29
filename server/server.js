@@ -32,22 +32,35 @@ app.use(async (req, res, next) => {
     next();
 });
 
-// Normalize URL path so both /api/xxx and /xxx work seamlessly with Vercel rewrites
+// Normalize URL path so both /api/xxx and /xxx work seamlessly with Vercel rewrites and standalone servers
 app.use((req, res, next) => {
-    // If request comes from Vercel rewrite to /api/index.js
-    const vercelPath = req.headers["x-matched-path"] || req.headers["x-forwarded-url"] || req.originalUrl || req.url;
+    const matchedPath = req.headers["x-matched-path"] || req.headers["x-forwarded-url"];
+    
     if (req.url.startsWith("/api/index.js")) {
         const queryIdx = req.url.indexOf("?");
         const query = queryIdx !== -1 ? req.url.slice(queryIdx) : "";
-        if (vercelPath && !vercelPath.startsWith("/api/index.js")) {
-            req.url = vercelPath + query;
+        
+        if (matchedPath && !matchedPath.startsWith("/api/index.js")) {
+            const hasQuery = matchedPath.includes("?");
+            req.url = matchedPath + (hasQuery ? "" : query);
+        } else {
+            const original = req.originalUrl || "";
+            if (original && !original.startsWith("/api/index.js")) {
+                req.url = original;
+            } else {
+                const stripped = req.url.replace("/api/index.js", "");
+                req.url = stripped ? (stripped.startsWith("/") ? stripped : "/" + stripped) : "/api";
+            }
         }
     }
+    
     if (!req.url.startsWith("/api") && req.url !== "/") {
-        req.url = "/api" + req.url;
+        req.url = "/api" + (req.url.startsWith("/") ? req.url : "/" + req.url);
     }
+    
     next();
 });
+
 
 // API Base Home route
 app.get(["/", "/api"], (req, res) => {

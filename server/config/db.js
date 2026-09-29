@@ -8,10 +8,18 @@ const connectDB = async () => {
     }
 
     const mongoUri = process.env.MONGO_URI;
+    const isCloudEnv =
+        process.env.NODE_ENV === "production" ||
+        Boolean(process.env.RENDER) ||
+        Boolean(process.env.VERCEL) ||
+        Boolean(process.env.RAILWAY_ENVIRONMENT);
 
-    // If running on Vercel and no cloud database URI provided, don't hang on localhost
-    if (process.env.VERCEL && (!mongoUri || mongoUri.includes("localhost") || mongoUri.includes("127.0.0.1"))) {
-        console.log("ℹ️ Vercel deployment: Cloud MongoDB Atlas URI required for persistent database on Vercel.");
+    const isLocalhostUri = !mongoUri || mongoUri.includes("localhost") || mongoUri.includes("127.0.0.1");
+
+    // In production/cloud environments, do NOT attempt to connect to localhost MongoDB,
+    // which would cause every request to hang for 5+ seconds before timing out.
+    if (isCloudEnv && isLocalhostUri) {
+        console.log("ℹ️ Cloud deployment detected: MONGO_URI is missing or pointing to localhost. Skipping MongoDB connection to avoid request timeouts.");
         return;
     }
 
