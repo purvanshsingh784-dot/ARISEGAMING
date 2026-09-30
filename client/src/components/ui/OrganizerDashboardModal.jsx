@@ -632,7 +632,7 @@ export default function OrganizerDashboardModal({ gamesListProp = [], onClose, o
 
   const handlePostAnnouncement = async (e) => {
     e.preventDefault();
-    let createdAnn = { ...announcementForm, id: "ann_" + Date.now(), time: "Just now" };
+    let createdAnn = { ...announcementForm, id: "ann_" + Date.now(), _id: "ann_" + Date.now(), time: "Just now" };
     try {
       const res = await api.createAnnouncement(announcementForm);
       if (res && res.data) {
@@ -641,15 +641,24 @@ export default function OrganizerDashboardModal({ gamesListProp = [], onClose, o
     } catch (err) {}
 
     addAnnouncementToStore(createdAnn);
+    const targetIdStr = String(createdAnn._id || createdAnn.id);
+    const filteredOld = announcementsList.filter(a => String(a._id || a.id) !== targetIdStr);
+    const updated = [createdAnn, ...filteredOld];
+
+    setAnnouncementsList(updated);
     try {
-      localStorage.setItem("arise_announcements", JSON.stringify(defaultAnnouncements));
+      localStorage.setItem("arise_announcements", JSON.stringify(updated));
     } catch (e) {}
-    if (onAnnouncementsUpdated) onAnnouncementsUpdated(defaultAnnouncements);
+
+    if (onAnnouncementsUpdated) onAnnouncementsUpdated(updated);
     if (onDataRefresh) onDataRefresh();
 
     showToast(" Announcement published to website!");
     setAnnouncementForm({ title: "", content: "", scope: "All", priority: "medium" });
   };
+
+
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md animate-fade-in">
